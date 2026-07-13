@@ -5,6 +5,7 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "regions": ["gru1"],
+  "rootDirectory": "frontend",
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30
