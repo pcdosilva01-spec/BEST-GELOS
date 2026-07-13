@@ -56,10 +56,5 @@
       "source": "/api/:path*",
       "destination": "https://api.bestgelo.com.br/api/:path*"
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@api-url",
-    "NEXT_PUBLIC_WHATSAPP_NUMBER": "@whatsapp-number",
-    "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY": "@google-maps-api-key"
-  }
+  ]
 }
