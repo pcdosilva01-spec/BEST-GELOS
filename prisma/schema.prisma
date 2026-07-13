@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  CUSTOMER
+  ADMIN
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  OPERATOR
+}
+
+enum ProductCategory {
+  CUBES       // Gelo em Cubos
+  CRUSHED     // Gelo Triturado
+  SPECIAL     // Gelo Especial/Personalizado
+  BAGGED      // Gelo Ensacado
+  BULK        // Gelo a Granel
+  DRY_ICE     // Gelo Seco
+}
+
+enum OrderStatus {
+  PENDING       // Recebido
+  CONFIRMED     // Confirmado
+  IN_PRODUCTION // Em Produção
+  READY         // Pronto para Entrega
+  OUT_FOR_DELIVERY // Saiu para Entrega
+  DELIVERED     // Entregue
+  CANCELLED     // Cancelado
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH
+  BANK_TRANSFER
+  ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIAL
+  REFUNDED
+  FAILED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String    // bcrypt hash
+  phone         String?
+  userType      UserType  @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orders        Order[]
+  addresses     Address[]
+
+  @@map("users")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  email     String?  @unique
+  cpfCnpj   String?  @unique
+  notes     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+  addresses Address[]
+
+  @@map("customers")
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  zipCode      String
+  isDefault    Boolean  @default(false)
+  label        String?  // "Casa", "Trabalho", "Evento"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("addresses")
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  description String?
+  category    ProductCategory
+  weight      Decimal          @db.Decimal(10, 3) // em kg
+  price       Decimal          @db.Decimal(10, 2)
+  imageUrl    String?
+  stock       Int              @default(0)
+  minStock    Int              @default(0)
+  isActive    Boolean          @default(true)
+  isFeatured  Boolean          @default(false)
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  orderItems  OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id              String         @id @default(cuid())
+  orderNumber     String         @unique @default(cuid())
+  customerId      String
+  customer        Customer       @relation(fields: [customerId], references: [id])
+  userId          String?
+  user            User?          @relation(fields: [userId], references: [id])
+  status          OrderStatus    @default(PENDING)
+  subtotal        Decimal        @db.Decimal(10, 2)
+  deliveryFee     Decimal        @db.Decimal(10, 2) @default(0)
+  discount        Decimal        @db.Decimal(10, 2) @default(0)
+  total           Decimal        @db.Decimal(10, 2)
+  paymentMethod   PaymentMethod?
+  paymentStatus   PaymentStatus  @default(PENDING)
+  deliveryAddress Json?          // JSON com endereço completo
+  deliveryDate    DateTime?
+  deliveryTime    String?        // "08:00-12:00" ou "14:00-18:00"
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal  @db.Decimal(10, 2)
+  total     Decimal  @db.Decimal(10, 2)
+
+  @@map("order_items")
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  notes     String?
+  createdAt DateTime    @default(now())
+  createdBy String?
+
+  @@map("order_status_history")
+}
+
+model AdminUser {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  password     String     // bcrypt hash
+  role         AdminRole  @default(ADMIN)
+  isActive     Boolean    @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("admin_users")
+}
