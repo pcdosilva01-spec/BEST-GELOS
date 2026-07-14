@@ -8,7 +8,7 @@ import {
   Snowflake, Truck, Shield, Star, Award, Zap,
   ChevronRight, CheckCircle, MessageCircle, MapPin,
   Clock, Users, Factory, Leaf, Droplet, Sparkles,
-  Menu, X, Phone, Mail, Facebook, Instagram
+  Menu, X, Phone, Mail, Facebook, Instagram, Clock as ClockIcon
 } from 'lucide-react';
 import { cn, formatCurrency, generateWhatsAppLink } from '@/lib/utils';
 import { useCartStore } from '@/lib/cart-store';
@@ -34,7 +34,7 @@ const products = [
   {
     id: 'gelo-cubos',
     name: 'Gelo em Cubos',
-    description: 'Gelo cristalino em cubos perfeitos, ideal para bebidas, drinks e resfriamento rápido. Produzido com água purificada.',
+    description: 'Gelo cristalino em cubos perfeitos (2,5cm), ideal para bebidas, drinks e resfriamento rápido. Produzido com água purificada por osmose reversa.',
     category: 'CUBES',
     weight: 5,
     price: 12.90,
@@ -44,7 +44,7 @@ const products = [
   {
     id: 'gelo-triturado',
     name: 'Gelo Triturado',
-    description: 'Gelo picado finamente, perfeito para caipirinhas, smoothies, drinks tropicais e resfriamento de alimentos.',
+    description: 'Gelo picado finamente, perfeito para caipirinhas, smoothies, drinks tropicais e resfriamento de alimentos. Textura uniforme.',
     category: 'CRUSHED',
     weight: 5,
     price: 14.90,
@@ -54,7 +54,7 @@ const products = [
   {
     id: 'gelo-especial',
     name: 'Gelo Especial',
-    description: 'Gelo personalizado para empresas e eventos: cubos com logo, formatos especiais, gelo seco e esculturas de gelo.',
+    description: 'Gelo personalizado para empresas e eventos: cubos com logo em relevo, formatos especiais, gelo seco e esculturas de gelo.',
     category: 'SPECIAL',
     weight: 1,
     price: 45.00,
@@ -64,7 +64,7 @@ const products = [
   {
     id: 'gelo-seco',
     name: 'Gelo Seco',
-    description: 'Dióxido de carbono sólido (-78°C) para efeitos especiais, transporte de perecíveis, limpeza criogênica.',
+    description: 'Dióxido de carbono sólido (-78°C) para efeitos especiais, transporte de perecíveis, limpeza criogênica e aplicações industriais.',
     category: 'DRY_ICE',
     weight: 1,
     price: 35.00,
@@ -115,9 +115,9 @@ const differentiators = [
 const testimonials = [
   {
     name: 'Carlos Mendes',
-    role: 'Proprietário - Bar do Carlos',
-    company: 'Bar & Restaurante',
-    content: 'A Best Gelo é nossa fornecedora há 3 anos. Gelo sempre cristalino, entrega no horário combinado e preço justo. Recomendo de olhos fechados!',
+    role: 'Proprietário',
+    company: 'Bar do Carlos',
+    content: 'A BEST GELOS é nossa fornecedora há 3 anos. Gelo sempre cristalino, entrega no horário combinado e preço justo. Recomendo de olhos fechados!',
     rating: 5,
     avatar: '/avatars/carlos.jpg',
   },
@@ -125,7 +125,7 @@ const testimonials = [
     name: 'Mariana Santos',
     role: 'Organizadora de Eventos',
     company: 'MS Eventos',
-    content: 'Para nossos casamentos e eventos corporativos, só confio na Best Gelo. O gelo especial com logo da empresa faz toda diferença na apresentação.',
+    content: 'Para nossos casamentos e eventos corporativos, só confio na BEST GELOS. O gelo especial com logo da empresa faz toda diferença na apresentação.',
     rating: 5,
     avatar: '/avatars/mariana.jpg',
   },
@@ -141,7 +141,7 @@ const testimonials = [
 
 const faqs = [
   {
-    question: 'Qual a área de atendimento da Best Gelo?',
+    question: 'Qual a área de atendimento da BEST GELOS?',
     answer: 'Atendemos toda a Grande São Paulo (Mauá, Santo André, São Bernardo, São Caetano, Diadema, SP Capital, Guarulhos, Osasco, etc.) e região do ABC. Para outras regiões, consulte disponibilidade.',
   },
   {
@@ -192,110 +192,14 @@ export default function HomePage() {
   return (
     <>
       {/* Skip Link */}
-      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-ice-600 text-white rounded-lg">
+      <a
+        href="#main-content"
+        className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-ice-600 text-white rounded-lg"
+      >
         Pular para o conteúdo principal
       </a>
 
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-frost-900/80 backdrop-blur-glass border-b border-frost-200 dark:border-frost-700">
-        <nav className="container-custom" aria-label="Navegação principal">
-          <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2" aria-label="Best Gelo - Página inicial">
-              <div className="w-10 h-10 rounded-xl bg-gradient-ice flex items-center justify-center">
-                <Snowflake className="w-6 h-6 text-white" aria-hidden="true" />
-              </div>
-              <span className="font-display font-bold text-xl text-frost-900 dark:text-white hidden sm:block">
-                Best Gelo
-              </span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-body-sm font-medium text-frost-600 dark:text-frost-400 hover:text-ice-600 dark:hover:text-ice-400 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-3">
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>
-                  Entrar
-                </Link>
-              </Button>
-              <Button variant="whatsapp" size="sm" asChild>
-                <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-1" aria-hidden="true" />
-                  WhatsApp
-                </Link>
-              </Button>
-              <Button variant="default" size="sm" asChild onClick={toggleCart}>
-                <Link href="/pedido/novo">
-                  <Snowflake className="w-4 h-4 mr-1" aria-hidden="true" />
-                  Pedir
-                  {getTotalItems() > 0 && (
-                    <span className="ml-1 bg-white/30 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                      {getTotalItems()}
-                    </span>
-                  )}
-                </Link>
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 rounded-lg text-frost-600 dark:text-frost-400 hover:bg-frost-100 dark:hover:bg-frost-800"
-              onClick={toggleCart}
-              aria-label="Abrir menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className={cn('md:hidden overflow-hidden transition-all duration-300', isOpen ? 'block' : 'hidden')}
-          >
-            <div className="py-4 space-y-2 border-t border-frost-200 dark:border-frost-700">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block px-4 py-2 text-body font-medium text-frost-600 dark:text-frost-400 hover:text-ice-600 dark:hover:text-ice-400 hover:bg-frost-50 dark:hover:bg-frost-800 rounded-lg"
-                  onClick={closeCart}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="px-4 pt-4 space-y-2 border-t border-frost-200 dark:border-frost-700">
-                <Button variant="whatsapp" className="w-full" asChild>
-                  <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={closeCart}>
-                    <MessageCircle className="w-4 h-4 mr-2" aria-hidden="true" />
-                    Pedir pelo WhatsApp
-                  </Link>
-                </Button>
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href="/login" onClick={closeCart}>
-                    Entrar na conta
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </nav>
-      </header>
+      {/* Header - Replaced by Header component from layout */}
 
       <main id="main-content">
         {/* Hero Section */}
@@ -539,7 +443,7 @@ export default function HomePage() {
               <span className="badge-ice mb-4 inline-block">Diferenciais</span>
               <h2 className="heading-section text-3xl sm:text-4xl lg:text-5xl mb-4">
                 Por que Escolher a{' '}
-                <span className="text-gradient-ice">Best Gelo</span>?
+                <span className="text-gradient-ice">BEST GELOS</span>?
               </h2>
               <p className="text-body text-lg max-w-2xl mx-auto text-frost-600">
                 Não somos apenas mais um fornecedor. Somos uma fábrica com paixão por qualidade,
@@ -675,7 +579,7 @@ export default function HomePage() {
               <span className="badge-ice mb-4 inline-block">Depoimentos</span>
               <h2 className="heading-section text-3xl sm:text-4xl lg:text-5xl mb-4">
                 Confiam na{' '}
-                <span className="text-gradient-ice">Best Gelo</span>
+                <span className="text-gradient-ice">BEST GELOS</span>
               </h2>
               <p className="text-body text-lg max-w-2xl mx-auto text-frost-600">
                 Mais de 500 clientes atendidos. Veja o que dizem quem já experimentou.
@@ -816,21 +720,21 @@ export default function HomePage() {
                     <MapPin className="w-6 h-6 text-ice-300" aria-hidden="true" />
                   </div>
                   <p className="font-semibold text-white">Fábrica & Escritório</p>
-                  <p className="text-ice-200/80 text-sm">Rua Bras Cubas, 624 - Vila Bocaina<br />Mauá - SP, 09310-730</p>
+                  <p className="text-ice-200/80 text-sm text-center">Rua Bras Cubas, 624 - Vila Bocaina<br />Mauá - SP, 09310-730</p>
                 </div>
                 <div className="flex flex-col items-center gap-2 p-4 border-l border-r border-white/10 md:border-l-0 md:border-r-0 md:border-t md:border-b">
                   <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-ice-300" aria-hidden="true" />
+                    <ClockIcon className="w-6 h-6 text-ice-300" aria-hidden="true" />
                   </div>
                   <p className="font-semibold text-white">Horário de Atendimento</p>
-                  <p className="text-ice-200/80 text-sm">Seg a Sex: 7h às 19h<br />Sáb: 7h às 13h<br />Dom: Plantão eventos</p>
+                  <p className="text-ice-200/80 text-sm text-center">Seg a Sex: 7h às 19h<br />Sáb: 7h às 13h<br />Dom: Plantão eventos</p>
                 </div>
                 <div className="flex flex-col items-center gap-2 p-4">
                   <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
                     <Phone className="w-6 h-6 text-ice-300" aria-hidden="true" />
                   </div>
                   <p className="font-semibold text-white">Telefone & WhatsApp</p>
-                  <p className="text-ice-200/80 text-sm">(11) 99999-9999<br />contato@bestgelo.com.br</p>
+                  <p className="text-ice-200/80 text-sm text-center">(11) 99999-9999<br />contato@bestgelos.com.br</p>
                 </div>
               </motion.div>
             </div>
@@ -844,7 +748,7 @@ export default function HomePage() {
               <h3 className="heading-section text-2xl text-center mb-6">Nos Encontre no Mapa</h3>
               <div className="aspect-video rounded-2xl overflow-hidden shadow-glass-lg bg-frost-200">
                 <iframe
-                  title="Localização Best Gelo - Mauá/SP"
+                  title="Localização BEST GELOS - Mauá/SP"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.123456789!1d-46.401234!2d-23.678901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef123456789ab%3A0xfedcba9876543210!2sR.%20Bras%20Cubas%2C%20624%20-%20Vila%20Bocaina%2C%20Mau%C3%A1%20-%20SP%2C%2009310-730!5e0!3m2!1spt-BR!2sbr!4v1234567890"
                   className="w-full h-full border-0"
                   allowFullScreen
@@ -857,193 +761,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-frost-900 text-ice-100">
-        <div className="container-custom py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            {/* Company Info */}
-            <div className="lg:col-span-2">
-              <Link href="/" className="flex items-center gap-2 mb-6" aria-label="Best Gelo - Página inicial">
-                <div className="w-10 h-10 rounded-xl bg-gradient-ice flex items-center justify-center">
-                  <Snowflake className="w-6 h-6 text-white" aria-hidden="true" />
-                </div>
-                <span className="font-display font-bold text-xl text-white">Best Gelo</span>
-              </Link>
-              <p className="text-ice-200/70 text-body max-w-sm mb-6">
-                Fábrica própria de gelo em Mauá/SP. Qualidade, pureza e entrega rápida para seu negócio ou evento.
-              </p>
-              <div className="flex gap-4">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-frost-800 flex items-center justify-center text-ice-300 hover:bg-ice-600/20 hover:text-white transition-colors" aria-label="Facebook">
-                  <Facebook className="w-5 h-5" aria-hidden="true" />
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-frost-800 flex items-center justify-center text-ice-300 hover:bg-ice-600/20 hover:text-white transition-colors" aria-label="Instagram">
-                  <Instagram className="w-5 h-5" aria-hidden="true" />
-                </a>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-frost-800 flex items-center justify-center text-ice-300 hover:bg-green-600/20 hover:text-green-400 transition-colors" aria-label="WhatsApp">
-                  <MessageCircle className="w-5 h-5" aria-hidden="true" />
-                </a>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <nav aria-label="Links rápidos">
-              <h4 className="font-semibold text-white mb-4">Links Rápidos</h4>
-              <ul className="space-y-3">
-                {[
-                  { href: '/produtos', label: 'Produtos' },
-                  { href: '/pedido/novo', label: 'Fazer Pedido' },
-                  { href: '/sobre', label: 'Sobre Nós' },
-                  { href: '/entrega', label: 'Área de Entrega' },
-                  { href: '/faq', label: 'FAQ' },
-                  { href: '/contato', label: 'Contato' },
-                ].map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-ice-200/70 hover:text-white transition-colors text-body-sm">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Contact */}
-            <address className="not-italic" aria-label="Informações de contato">
-              <h4 className="font-semibold text-white mb-4">Contato</h4>
-              <ul className="space-y-3 text-ice-200/70 text-body-sm">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                  <span>Rua Bras Cubas, 624 - Vila Bocaina<br />Mauá - SP, 09310-730</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                  <a href="tel:+5511999999999" className="hover:text-white transition-colors">(11) 99999-9999</a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                  <a href="mailto:contato@bestgelo.com.br" className="hover:text-white transition-colors">contato@bestgelo.com.br</a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors">WhatsApp Comercial</a>
-                </li>
-              </ul>
-            </address>
-          </div>
-
-          {/* Bottom Bar */}
-          <div className="border-t border-frost-800 pt-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-ice-200/50 text-sm">
-                © {new Date().getFullYear()} Best Gelo Comércio de Gelo LTDA. Todos os direitos reservados.
-                <br />
-                CNPJ: 17.812.251/0001-73 | IE: 442.172.407.110
-              </p>
-              <div className="flex items-center gap-6 text-sm text-ice-200/50">
-                <Link href="/politica-privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link>
-                <Link href="/termos-uso" className="hover:text-white transition-colors">Termos de Uso</Link>
-                <Link href="/lgpd" className="hover:text-white transition-colors">LGPD</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* Cart Sidebar */}
-      <motion.aside
-        initial={{ x: '100%' }}
-        animate={{ x: isOpen ? 0 : '100%' }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="fixed top-0 right-0 h-full w-full max-w-sm z-50 bg-white dark:bg-frost-900 shadow-glass-lg flex flex-col"
-        aria-label="Carrinho de compras"
-      >
-        <div className="flex items-center justify-between p-4 border-b border-frost-200 dark:border-frost-700">
-          <h3 className="font-display font-semibold text-frost-900 dark:text-white">Carrinho ({getTotalItems()})</h3>
-          <button onClick={toggleCart} className="p-2 rounded-lg text-frost-500 hover:bg-frost-100 dark:hover:bg-frost-800" aria-label="Fechar carrinho">
-            <X className="w-5 h-5" aria-hidden="true" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4">
-          {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center text-frost-500">
-              <Snowflake className="w-16 h-16 mb-4 text-frost-300" aria-hidden="true" />
-              <p className="text-body">Seu carrinho está vazio</p>
-              <Button asChild className="mt-4">
-                <Link href="/produtos" onClick={closeCart}>Ver Produtos</Link>
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.id} className="flex gap-3 p-2 bg-frost-50 dark:bg-frost-800/50 rounded-xl">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-ice-100 to-ice-200 flex items-center justify-center flex-shrink-0">
-                    <Snowflake className="w-8 h-8 text-ice-300" aria-hidden="true" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-frost-900 dark:text-white truncate">{item.name}</h4>
-                    <p className="text-sm text-ice-600 dark:text-ice-400">{formatCurrency(item.price)} x {item.quantity}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => useCartStore.getState().updateQuantity(item.productId, item.quantity - 1)} className="w-8 h-8 rounded-lg bg-frost-200 dark:bg-frost-700 text-frost-600 dark:text-frost-300 hover:bg-frost-300 dark:hover:bg-frost-600" aria-label="Diminuir quantidade">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
-                    </button>
-                    <span className="font-semibold text-frost-900 dark:text-white w-8 text-center">{item.quantity}</span>
-                    <button onClick={() => useCartStore.getState().updateQuantity(item.productId, item.quantity + 1)} className="w-8 h-8 rounded-lg bg-frost-200 dark:bg-frost-700 text-frost-600 dark:text-frost-300 hover:bg-frost-300 dark:hover:bg-frost-600" aria-label="Aumentar quantidade">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                    </button>
-                    <button onClick={() => useCartStore.getState().removeItem(item.productId)} className="p-1 text-frost-400 hover:text-red-500" aria-label="Remover item">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {items.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-frost-200 dark:border-frost-700 space-y-3">
-              <div className="flex justify-between text-body">
-                <span className="text-frost-600 dark:text-frost-400">Subtotal</span>
-                <span className="font-semibold text-frost-900 dark:text-white">{formatCurrency(getSubtotal())}</span>
-              </div>
-              <div className="flex justify-between text-body">
-                <span className="text-frost-600 dark:text-frost-400">Entrega</span>
-                <span className="font-semibold text-frost-900 dark:text-white">{getSubtotal() >= 100 ? 'Grátis' : formatCurrency(15)}</span>
-              </div>
-              <div className="flex justify-between text-heading-md font-bold text-frost-900 dark:text-white border-t border-frost-200 dark:border-frost-700 pt-3">
-                <span>Total</span>
-                <span>{formatCurrency(getSubtotal() + (getSubtotal() >= 100 ? 0 : 15))}</span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {items.length > 0 && (
-          <div className="p-4 border-t border-frost-200 dark:border-frost-700 space-y-3">
-            <Button className="w-full" size="lg" asChild onClick={closeCart}>
-              <Link href="/pedido/novo">Finalizar Pedido</Link>
-            </Button>
-            <Button variant="whatsapp" className="w-full" asChild>
-              <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5 mr-2" aria-hidden="true" />
-                Enviar pelo WhatsApp
-              </Link>
-            </Button>
-          </div>
-        )}
-      </motion.aside>
-
-      {/* Cart Backdrop */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={toggleCart}
-          aria-hidden="true"
-        />
-      )}
+      {/* Footer - Replaced by Footer component from layout */}
     </>
   );
 }

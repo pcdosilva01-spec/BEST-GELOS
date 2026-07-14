@@ -1,11 +1,11 @@
 {
-  "name": "Best Gelo",
-  "short_name": "Best Gelo",
+  "name": "BEST GELOS",
+  "short_name": "BEST GELOS",
   "description": "Fábrica de Gelo em Mauá/SP - Gelo em cubos, triturado, seco e personalizado. Entrega rápida na Grande SP.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#06b6d4",
+  "theme_color": "#0ea5e9",
   "orientation": "portrait-primary",
   "icons": [
     {

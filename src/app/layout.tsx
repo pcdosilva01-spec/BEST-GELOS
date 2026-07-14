@@ -23,14 +23,14 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: {
-    default: 'Best Gelo | Fábrica de Gelo em Mauá/SP - Entrega Rápida',
-    template: '%s | Best Gelo',
+    default: 'BEST GELOS | Fábrica de Gelo em Mauá/SP - Entrega Rápida',
+    template: '%s | BEST GELOS',
   },
-  description: 'Best Gelo Comércio de Gelo LTDA - Fábrica própria em Mauá/SP. Gelo em cubos, triturado, seco e personalizado. Entrega em até 2h na Grande SP. Atendemos eventos, bares, restaurantes e consumidor final.',
+  description: 'BEST GELOS - Fábrica de Gelo em Mauá/SP. Gelo em cubos, triturado, seco e personalizado. Entrega em até 2h na Grande SP. Atendemos eventos, bares, restaurantes e consumidor final.',
   keywords: ['gelo', 'fábrica de gelo', 'gelo em cubos', 'gelo triturado', 'gelo seco', 'gelo personalizado', 'entrega de gelo', 'Mauá', 'São Paulo', 'ABC paulista', 'eventos', 'bares', 'restaurantes'],
-  authors: [{ name: 'Best Gelo Comércio de Gelo LTDA' }],
-  creator: 'Best Gelo',
-  publisher: 'Best Gelo Comércio de Gelo LTDA',
+  authors: [{ name: 'BEST GELOS' }],
+  creator: 'BEST GELOS',
+  publisher: 'BEST GELOS',
   formatDetection: {
     email: true,
     address: true,
@@ -39,25 +39,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://bestgelo.com.br',
-    title: 'Best Gelo | Fábrica de Gelo em Mauá/SP - Entrega Rápida',
+    url: 'https://bestgelos.com.br',
+    title: 'BEST GELOS | Fábrica de Gelo em Mauá/SP - Entrega Rápida',
     description: 'Gelo de qualidade superior direto da fábrica. Cubos, triturado, seco e personalizado. Entrega em até 2h na Grande SP.',
-    siteName: 'Best Gelo',
+    siteName: 'BEST GELOS',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Best Gelo - Fábrica de Gelo em Mauá/SP',
+        alt: 'BEST GELOS - Fábrica de Gelo em Mauá/SP',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Best Gelo | Fábrica de Gelo em Mauá/SP',
+    title: 'BEST GELOS | Fábrica de Gelo em Mauá/SP',
     description: 'Gelo de qualidade superior direto da fábrica. Entrega em até 2h na Grande SP.',
     images: ['/og-image.jpg'],
-    creator: '@bestgelo',
+    creator: '@bestgelos',
   },
   robots: {
     index: true,
