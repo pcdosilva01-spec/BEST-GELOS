@@ -6,6 +6,8 @@ interface User {
   name: string;
   email: string;
   phone?: string;
+  document?: string;
+  isB2B?: boolean;
   userType: 'CUSTOMER' | 'ADMIN';
 }
 
@@ -17,6 +19,7 @@ interface AuthState {
   isLoading: boolean;
   setAuth: (data: { user: User; accessToken: string; refreshToken: string }) => void;
   setUser: (user: User) => void;
+  login: (user: User) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
 }
@@ -34,6 +37,15 @@ export const useAuthStore = create<AuthState>()(
         set({ user, accessToken, refreshToken, isAuthenticated: true, isLoading: false }),
 
       setUser: (user) => set({ user }),
+
+      login: (user) =>
+        set({
+          user,
+          accessToken: 'mock-token-' + Date.now(),
+          refreshToken: 'mock-refresh-' + Date.now(),
+          isAuthenticated: true,
+          isLoading: false,
+        }),
 
       logout: () =>
         set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false }),

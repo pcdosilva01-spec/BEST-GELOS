@@ -1,191 +1,442 @@
 'use client';
 
-import { Header, Footer } from '@/components/layout/header-footer';
-import { ChevronDown, ChevronUp, HelpCircle, Truck, IceCream, Shield, CreditCard, Clock, MapPin } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import {
+  Snowflake, Truck, Clock, MapPin, CreditCard, Package,
+  CheckCircle, AlertCircle, HelpCircle, Search, ChevronDown,
+  ChevronUp, MessageCircle, Phone, Mail, Factory, Shield, X
+} from 'lucide-react';
 import { useState } from 'react';
 
 const faqs = [
   {
-    category: 'Pedidos',
-    icon: IceCream,
-    questions: [
+    category: 'Geral',
+    items: [
       {
-        q: 'Qual a quantidade mínima para pedido?',
-        a: 'Para varejo: 1 saco de 5kg. Para atacado/eventos: 50kg. Gelo personalizado: 50kg mínimo.'
+        q: 'O que é a BEST Gelo?',
+        a: 'Somos a maior fábrica de gelo do ABC Paulista, com mais de 15 anos de experiência. Produzimos gelo em cubos, triturado, seco e personalizado com água purificada por osmose reversa, seguindo todas as normas da ANVISA.',
       },
       {
-        q: 'Como faço para pedir gelo personalizado?',
-        a: 'Entre em contato pelo WhatsApp com 48h de antecedência. Envie o logotipo/arte em vetor (AI, SVG, EPS) ou alta resolução. Fazemos prova digital para aprovação antes da produção.'
+        q: 'Qual a diferença entre gelo em cubos e triturado?',
+        a: 'Gelo em cubos derrete mais devagar, ideal para drinks e resfriamento prolongado. Gelo triturado resfria mais rápido, perfeito para caipirinhas, smoothies e resfriamento de alimentos.',
       },
       {
-        q: 'Posso agendar a entrega para data/horário específico?',
-        a: 'Sim! Agendamos com antecedência. Recomendamos pedir com pelo menos 2h de antecedência para entrega normal, ou agendar para eventos com 24h de antecedência.'
+        q: 'O gelo é próprio para consumo?',
+        a: 'Sim! Nossa água passa por osmose reversa, filtração por carvão ativado e tratamento UV. Temos certificação ANVISA e cada lote tem rastreabilidade completa.',
       },
       {
-        q: 'Vocês atendem eventos grandes (casamentos, formaturas, corporativos)?',
-        a: 'Sim! Atendemos eventos de todos os tamanhos. Temos estrutura para até 5.000kg/dia. Oferecemos gelo personalizado, carrinhos térmicos e equipe de apoio para eventos grandes. Consulte condições especiais.'
-      }
-    ]
+        q: 'Vocês fazem gelo com formato personalizado?',
+        a: 'Sim! Produzimos gelo com logotipo da empresa, formatos especiais (esferas, corações, cubos grandes) e cores personalizadas. Ideal para eventos corporativos, casamentos e ações de marketing. Consulte condições.',
+      },
+    ],
   },
   {
-    category: 'Entrega',
-    icon: Truck,
-    questions: [
+    category: 'Pedidos e Pagamento',
+    items: [
       {
-        q: 'Qual o tempo de entrega?',
-        a: 'Até 2 horas na Grande SP (ABC, São Paulo). Para Mauá: 30-60 min. Consulte prazos para outras regiões no WhatsApp.'
+        q: 'Qual o pedido mínimo para entrega?',
+        a: 'Para entrega: 10kg (2 sacos de 5kg). Para retirada na fábrica: não há mínimo. Para gelo personalizado: mínimo de 50kg.',
       },
-      {
-        q: 'Vocês entregam em condomínios/prédios?',
-        a: 'Sim. O motorista entra em contato 15 min antes da chegada. Para condomínios com portaria, autorize a entrada. Entregamos no local combinado (garagem, salão de festas, etc).'
-      },
-      {
-        q: 'O gelo vem embalado? Como é o transporte?',
-        a: 'Sim! Sacos plásticos reforçados (5kg, 10kg, 20kg). Transporte em veículos refrigerados (0°C a -5°C) com caixas térmicas. O gelo chega intacto e no ponto certo.'
-      },
-      {
-        q: 'E se eu não estiver no local na hora da entrega?',
-        a: 'O motorista aguarda até 15 min e tenta contato. Se não conseguir entregar, retorna à fábrica e reagendamos (pode haver taxa de reentrega). Combine com porteiro/zelo se não puder receber.'
-      }
-    ]
-  },
-  {
-    category: 'Qualidade e Produtos',
-    icon: Shield,
-    questions: [
-      {
-        q: 'O gelo é próprio para consumo? Tem certificado?',
-        a: 'Sim! Água de poço artesiano próprio, osmose reversa, certificação ANVISA e Vigilância Sanitária. Análises microbiológicas mensais em laboratório credenciado. Gelo alimentício 100% seguro.'
-      },
-      {
-        q: 'Qual a diferença do gelo Best Gelo para o de mercado?',
-        a: 'Nosso gelo: congelamento lento (cubos mais densos), água purificada (sem gosto/cheiro), derretimento 40% mais lento, cubos transparentes e padronizados. Gelo de mercado costuma ser turvo, derrete rápido e pode ter gosto de cloro.'
-      },
-      {
-        q: 'Vocês vendem gelo seco? Quais os cuidados?',
-        a: 'Sim, vendemos gelo seco (CO₂ sólido a -78°C). Cuidados: use luvas (queimadura por frio), não feche em recipientes herméticos (risco de explosão), mantenha ventilado. Vendemos em blocos de 1kg, 5kg, 10kg.'
-      },
-      {
-        q: 'O gelo triturado vem pronto ou trituram na hora?',
-        a: 'Trituramos na hora do pedido para garantir textura ideal (não vira "pó" nem pedaços grandes). Ideal para caipirinhas, frozen drinks e resfriamento rápido.'
-      }
-    ]
-  },
-  {
-    category: 'Pagamento e Preços',
-    icon: CreditCard,
-    questions: [
       {
         q: 'Quais formas de pagamento aceitam?',
-        a: 'PIX (chave CNPJ), dinheiro, cartão débito/crédito (maquininha na entrega), boleto para empresas (faturamento 30 dias). Para atacado: condições especiais.'
+        a: 'PIX (com 5% de desconto), cartão de crédito/débito (Visa, Mastercard, Elo, Amex), dinheiro na entrega (apenas entrega padrão) e boleto para clientes B2B cadastrados.',
       },
       {
-        q: 'Tem nota fiscal?',
-        a: 'Sim, emitimos NF-e para todos os pedidos. Para consumidor final: NFC-e. Para empresas: NF-e com CFOP correto. Enviamos por e-mail/WhatsApp na hora da entrega.'
+        q: 'Como faço um pedido?',
+        a: 'Pelo site (carrinho), WhatsApp (11) 99999-9999, telefone (11) 3333-4444 ou e-mail contato@bestgelo.com.br. Pedidos online têm rastreamento em tempo real.',
       },
       {
-        q: 'Como funciona o preço para atacado/bares/restaurantes?',
-        a: 'Tabela progressiva: quanto mais volume, menor o preço/kg. Bares/restaurantes: faturamento quinzenal/mensal, entrega programada, suporte prioritário. Entre em contato para tabela comercial.'
+        q: 'Posso cancelar ou alterar meu pedido?',
+        a: 'Sim, até 30 minutos antes da saída para entrega. Para gelo personalizado, até 24h antes da produção. Entre em contato pelo WhatsApp ou telefone.',
       },
       {
-        q: 'Vocês dão desconto para pagamento à vista/PIX?',
-        a: 'Sim! 5% de desconto no PIX para pedidos acima de R$ 200. Para atacado recorrente, negociamos condições personalizadas.'
-      }
-    ]
+        q: 'Emitem nota fiscal?',
+        a: 'Sim, emitimos NF-e para todos os pedidos. Para PJ, informe o CNPJ no cadastro. Para PF, emitimos com CPF.',
+      },
+    ],
   },
   {
-    category: 'Outras Dúvidas',
-    icon: HelpCircle,
-    questions: [
+    category: 'Entrega e Retirada',
+    items: [
       {
-        q: 'Qual o horário de funcionamento?',
-        a: 'Fábrica: Segunda a sábado 6h-22h | Domingo 7h-15h. Entregas: Segunda a sábado 7h-20h | Domingo 8h-14h. WhatsApp: 24h (resposta em horário comercial).'
+        q: 'Qual a área de entrega?',
+        a: 'Atendemos toda a Grande São Paulo e ABC (Santo André, São Bernardo, São Caetano, Diadema, Mauá, Ribeirão Pires, Rio Grande da Serra). Outras regiões consulte disponibilidade.',
       },
       {
-        q: 'Onde fica a fábrica? Posso retirar direto?',
-        a: 'Rua Bras Cubas, 624 - Vila Bocaina, Mauá/SP (próximo ao Rodoanel). Sim, pode retirar na fábrica (desconto de 5% no varejo). Avise com 30 min de antecedência pelo WhatsApp.'
+        q: 'Quanto tempo demora a entrega?',
+        a: 'Padrão: até 4h úteis. Expressa: até 2h. Agendada: no horário escolhido. Retirada na fábrica: disponível em ~30 min após confirmação.',
       },
       {
-        q: 'Vocês alugam freezers/caixas térmicas para eventos?',
-        a: 'Sim! Temos freezers horizontais (300L, 500L) e caixas térmicas profissionais para locação. Inclui entrega, instalação e retirada. Consulte valores e disponibilidade.'
+        q: 'Como funciona a entrega agendada?',
+        a: 'No checkout, escolha "Entrega Agendada", selecione data e horário (intervalos de 1h). Confirmamos por WhatsApp. Taxa: R$ 20,00.',
       },
       {
-        q: 'Como faço reclamação ou elogio?',
-        a: 'WhatsApp (11) 99999-9999, e-mail contato@bestgelo.com.br ou formulário no site. Respondemos em até 4h úteis. Sua opinião nos ajuda a melhorar!'
-      }
-    ]
-  }
+        q: 'Vocês entregam em apartamentos/condomínios?',
+        a: 'Sim, deixamos na portaria ou recepção. Para entrega na unidade, combinamos com o cliente. Em prédios sem portaria, combinamos ponto de encontro.',
+      },
+      {
+        q: 'O que acontece se ninguém estiver no local?',
+        a: 'Tentamos contato por telefone/WhatsApp. Após 15 min, deixamos na portaria ou local combinado. Se não for possível, retornamos à fábrica e cobramos nova taxa de entrega.',
+      },
+    ],
+  },
+  {
+    category: 'Gelo Seco',
+    items: [
+      {
+        q: 'O que é gelo seco?',
+        a: 'É CO₂ sólido (dióxido de carbono) a -78°C. Não derrete, sublima (vira gás). Ideal para efeitos especiais, transporte de perecíveis, limpeza criogênica.',
+      },
+      {
+        q: 'Como manusear gelo seco com segurança?',
+        a: 'SEMPRE use luvas térmicas (queimadura por frio). Não coloque em recipientes herméticos (risco de explosão). Use em local ventilado (desloca oxigênio). Mantenha longe de crianças e pets.',
+      },
+      {
+        q: 'Quanto tempo dura o gelo seco?',
+        a: 'Em isopor bom: 24-48h (sublima ~10-15%/dia). Em freezer comum: dura mais. Não guarde em geladeira/frigorífico comum (danifica o equipamento).',
+      },
+      {
+        q: 'Qual a quantidade mínima de gelo seco?',
+        a: 'Vendemos a partir de 1kg. Para eventos/indústria, embalagens de 5kg, 10kg e 20kg. Consulte preços para volumes maiores.',
+      },
+    ],
+  },
+  {
+    category: 'B2B / Atacado',
+    items: [
+      {
+        q: 'Como virar cliente atacadista?',
+        a: 'Cadastre-se em /b2b ou fale com nossa equipe comercial. Oferecemos preços especiais, crédito faturado (após análise), entrega programada e gerente de conta dedicado.',
+      },
+      {
+        q: 'Quais os benefícios B2B?',
+        a: 'Preços com até 30% desconto, faturamento 15/30/45 dias, entrega programada semanal/quinzenal, prioridade em alta demanda, relatórios de consumo, gelo personalizado com sua marca.',
+      },
+      {
+        q: 'Atendem eventos grandes?',
+        a: 'Sim! Casamentos, formaturas, shows, feiras, eventos corporativos. Temos estrutura para grandes volumes com entrega fracionada e equipe de apoio. Solicite orçamento.',
+      },
+    ],
+  },
 ];
 
 export default function FAQPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+  const [activeCategory, setActiveCategory] = useState('all');
+
+  const allItems = faqs.flatMap(cat =>
+    cat.items.map(item => ({ ...item, category: cat.category }))
+  );
+
+  const filteredItems = allItems.filter(item =>
+    item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.a.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const categories = ['all', ...faqs.map(c => c.category)];
+
+  const toggleItem = (question: string) => {
+    setOpenItems(prev => {
+      const next = new Set(prev);
+      if (next.has(question)) next.delete(question);
+      else next.add(question);
+      return next;
+    });
+  };
 
   return (
-    <>
-      <Header />
-      <main id="main-content" className="pt-16 sm:pt-20">
-        <section className="py-16 lg:py-24 bg-gradient-to-b from-frost-50 to-white">
-          <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-frost-900 tracking-tight mb-6">
-                Perguntas <span className="text-ice-600">Frequentes</span>
-              </h1>
-              <p className="text-lg sm:text-xl text-frost-600 leading-relaxed">
-                Não encontrou sua dúvida? <a href="/contato" className="text-ice-600 font-medium hover:underline">Fale conosco</a>
-              </p>
-            </div>
-          </div>
-        </section>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      {/* Hero */}
+      <section className="relative bg-gradient-to-b from-ice-50 to-white dark:from-gray-900 dark:to-gray-950 py-16 lg:py-24">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-ice-200/30 dark:bg-ice-800/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-red-200/20 dark:bg-red-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
 
-        <section className="py-16 lg:py-24">
-          <div className="container-custom">
-            <div className="max-w-3xl mx-auto">
-              {faqs.map((category, catIndex) => (
-                <div key={catIndex} className="mb-12">
-                  <h2 className="font-display font-semibold text-2xl text-frost-900 mb-6 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-ice-100 flex items-center justify-center">
-                      <category.icon className="w-5 h-5 text-ice-600" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <Badge variant="outline" className="mb-6 text-sm lg:text-base px-4 py-2" style={{ borderColor: 'hsl(var(--ice-border))' }}>
+              <HelpCircle className="mr-2 h-4 w-4 text-ice-600 dark:text-ice-400" />
+              Central de Ajuda
+            </Badge>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 font-space-grotesk">
+              Dúvidas <span className="text-ice-600 dark:text-ice-400">Frequentes</span>
+            </h1>
+            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Encontre respostas rápidas para as perguntas mais comuns.
+              Não achou o que procura? Fale conosco!
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Search & Categories */}
+      <section className="py-8 lg:py-12 -mt-10 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <aside className="lg:col-span-1">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="sticky top-24 space-y-6"
+              >
+                {/* Search */}
+                <Card className="border-ice-200 dark:border-ice-800">
+                  <CardContent className="p-4">
+                    <Label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Buscar Perguntas
+                    </Label>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        type="text"
+                        placeholder="Digite sua dúvida..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10"
+                      />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
-                    {category.category}
-                  </h2>
-                  <div className="space-y-3">
-                    {category.questions.map((faq, qIndex) => (
-                      <details key={qIndex} className="group card-glass">
-                        <summary className="flex items-center justify-between p-5 cursor-pointer list-none focus:outline-none focus:ring-2 focus:ring-ice-500 focus:ring-offset-2">
-                          <p className="font-medium text-frost-900 pr-10">{faq.q}</p>
-                          <span className="flex-shrink-0 transition-transform duration-200 group-open:rotate-180">
-                            <ChevronDown className="w-5 h-5 text-frost-400" />
-                          </span>
-                        </summary>
-                        <div className="px-5 pb-5 text-frost-600 leading-relaxed border-t border-frost-100 animate-accordion-down">
-                          {faq.a}
-                        </div>
-                      </details>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                  </CardContent>
+                </Card>
 
-              <div className="card-glass p-8 text-center mt-8">
-                <h3 className="font-display font-semibold text-2xl text-frost-900 mb-3">Não encontrou sua resposta?</h3>
-                <p className="text-frost-600 mb-6">Nossa equipe está pronta para ajudar.</p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20..."
-                     target="_blank" rel="noopener noreferrer"
-                     className="btn-whatsapp">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                    WhatsApp
-                  </a>
-                  <a href="/contato" className="btn-primary">
-                    Formulário de Contato
-                  </a>
-                </div>
-              </div>
+                {/* Categories */}
+                <Card className="border-ice-200 dark:border-ice-800">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Categorias</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="space-y-1">
+                      {categories.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => { setActiveCategory(cat); setSearchQuery(''); }}
+                          className={cn(
+                            'w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                            activeCategory === cat
+                              ? 'bg-ice-100 dark:bg-ice-900/30 text-ice-700 dark:text-ice-300'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          )}
+                        >
+                          {cat === 'all' ? 'Todas' : cat}
+                        </button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Quick Contact */}
+                <Card className="border-ice-200 dark:border-ice-800 bg-gradient-to-br from-ice-50 to-white dark:from-ice-900/20 dark:to-gray-900">
+                  <CardContent className="p-6 text-center">
+                    <HelpCircle className="h-12 w-12 text-ice-600 dark:text-ice-400 mx-auto mb-4" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Não encontrou sua resposta?</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Nossa equipe está pronta para ajudar.
+                    </p>
+                    <div className="space-y-2">
+                      <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 text-green-600 dark:text-green-400 font-medium hover:underline">
+                        <MessageCircle className="h-5 w-5" />
+                        WhatsApp: (11) 99999-9999
+                      </a>
+                      <a href="tel:+551133334444" className="flex items-center justify-center gap-2 text-ice-600 dark:text-ice-400 font-medium hover:underline">
+                        <Phone className="h-5 w-5" />
+                        (11) 3333-4444
+                      </a>
+                      <a href="mailto:contato@bestgelo.com.br" className="flex items-center justify-center gap-2 text-red-600 dark:text-red-400 font-medium hover:underline">
+                        <Mail className="h-5 w-5" />
+                        contato@bestgelo.com.br
+                      </a>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </aside>
+
+            {/* FAQ List */}
+            <div className="lg:col-span-3">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {searchQuery && (
+                  <div className="mb-6 p-4 bg-ice-50 dark:bg-ice-900/20 border border-ice-200 dark:border-ice-800 rounded-lg flex items-center justify-between">
+                    <span className="text-sm text-ice-700 dark:text-ice-300">
+                      {filteredItems.length} resultado{filteredItems.length !== 1 ? 's' : ''} para "<strong>{searchQuery}</strong>"
+                    </span>
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="text-ice-600 dark:text-ice-400 hover:underline text-sm flex items-center gap-1"
+                    >
+                      <X className="h-4 w-4" />
+                      Limpar busca
+                    </button>
+                  </div>
+                )}
+
+                {activeCategory !== 'all' && !searchQuery && (
+                  <div className="mb-6">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                      <Badge variant="outline" className="bg-ice-100 dark:bg-ice-900/30 text-ice-700 dark:text-ice-300">
+                        {activeCategory}
+                      </Badge>
+                    </h2>
+                    <div className="space-y-3">
+                      {faqs.find(c => c.category === activeCategory)?.items.map((item, i) => (
+                        <FAQItem
+                          key={item.q}
+                          question={item.q}
+                          answer={item.a}
+                          index={i}
+                          isOpen={openItems.has(item.q)}
+                          onToggle={() => toggleItem(item.q)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {!searchQuery && activeCategory === 'all' && (
+                  <>
+                    {faqs.map((cat, catIndex) => (
+                      <motion.div
+                        key={cat.category}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ delay: catIndex * 0.1 }}
+                      >
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-700">
+                          <Badge variant="outline" className="bg-ice-100 dark:bg-ice-900/30 text-ice-700 dark:text-ice-300">
+                            {cat.category}
+                          </Badge>
+                        </h2>
+                        <div className="space-y-3">
+                          {cat.items.map((item, i) => (
+                            <FAQItem
+                              key={item.q}
+                              question={item.q}
+                              answer={item.a}
+                              index={i}
+                              isOpen={openItems.has(item.q)}
+                              onToggle={() => toggleItem(item.q)}
+                            />
+                          ))}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </>
+                )}
+
+                {filteredItems.length === 0 && searchQuery && (
+                  <div className="text-center py-12">
+                    <HelpCircle className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Nenhum resultado encontrado</h3>
+                    <p className="text-gray-500 dark:text-gray-400 mb-6">Tente buscar com outras palavras ou</p>
+                    <Button variant="outline" onClick={() => setSearchQuery('')}>
+                      <X className="h-4 w-4 mr-2" />
+                      Limpar busca
+                    </Button>
+                  </div>
+                )}
+              </motion.div>
             </div>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-gradient-to-r from-ice-600 to-ice-700 dark:from-ice-700 dark:to-ice-800 py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 font-space-grotesk">
+              Ainda tem dúvidas?
+            </h2>
+            <p className="text-ice-100 text-lg mb-8 max-w-2xl mx-auto">
+              Nossa equipe especializada está pronta para atender você.
+              Resposta rápida no WhatsApp ou ligue para nossa central.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-white text-ice-600 hover:bg-ice-50 px-8 py-4 rounded-xl font-semibold text-lg transition-colors">
+                <MessageCircle className="h-6 w-6" />
+                Falar no WhatsApp
+              </a>
+              <a href="/contato" className="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-xl font-semibold text-lg transition-colors">
+                <Mail className="h-6 w-6" />
+                Enviar E-mail
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FAQItem({ question, answer, index, isOpen, onToggle }: {
+  question: string;
+  answer: string;
+  index: number;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+    >
+      <Card className="border-gray-200 dark:border-gray-700 overflow-hidden">
+        <button
+          onClick={onToggle}
+          className="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-ice-500 focus:ring-offset-2 rounded-lg"
+        >
+          <span className="font-medium text-gray-900 dark:text-white pr-4">{question}</span>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex-shrink-0 text-ice-600 dark:text-ice-400"
+          >
+            <ChevronDown className="h-5 w-5" />
+          </motion.div>
+        </button>
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="overflow-hidden"
+        >
+          <CardContent className="pb-5 px-5 text-gray-600 dark:text-gray-400">
+            <p>{answer}</p>
+          </CardContent>
+        </motion.div>
+      </Card>
+    </motion.div>
   );
 }

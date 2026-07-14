@@ -1,62 +1,256 @@
-import { Header, Footer } from '@/components/layout/header-footer';
+'use client';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { cn, generateWhatsAppLink } from '@/lib/utils';
+import { useAuthStore } from '@/lib/auth-store';
+import {
+  Snowflake, Mail, Lock, Eye, EyeOff, User, MessageCircle,
+  ChevronRight, AlertCircle, CheckCircle, Loader2
+} from 'lucide-react';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { login } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    remember: false,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Mock validation
+      if (!formData.email || !formData.password) {
+        throw new Error('Preencha todos os campos');
+      }
+
+      if (formData.password.length < 6) {
+        throw new Error('Senha deve ter pelo menos 6 caracteres');
+      }
+
+      // Mock successful login
+      login({
+        id: '1',
+        name: formData.email.split('@')[0],
+        email: formData.email,
+        phone: '(11) 99999-9999',
+        document: '123.456.789-00',
+        isB2B: false,
+        userType: 'CUSTOMER',
+      });
+
+      router.push('/');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao fazer login. Tente novamente.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleWhatsAppLogin = () => {
+    const whatsappUrl = generateWhatsAppLink('Olá! Gostaria de acessar minha conta na BEST Gelo.');
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
-    <>
-      <Header />
-      <main id="main-content" className="pt-16 sm:pt-20 min-h-screen">
-        <section className="py-16 lg:py-24 bg-gradient-to-b from-frost-50 to-white">
-          <div className="container-custom">
-            <div className="max-w-md mx-auto">
-              <div className="card-glass p-8">
-                <div className="text-center mb-8">
-                  <h1 className="font-display font-bold text-3xl text-frost-900">Entrar na conta</h1>
-                  <p className="text-frost-600 mt-2">Acesse seu painel de pedidos</p>
-                </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <Snowflake className="w-12 h-12 text-ice-600 dark:text-ice-400" />
+            <span className="font-space-grotesk font-bold text-3xl text-gray-900 dark:text-white">
+              BEST<span className="text-red-600">Gelo</span>
+            </span>
+          </Link>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Acesse sua conta para fazer pedidos e acompanhar entregas
+          </p>
+        </div>
 
-                <form className="space-y-6">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-frost-700 mb-2">E-mail</label>
-                    <input type="email" id="email" className="w-full px-4 py-3 rounded-xl border border-frost-200 bg-white focus:outline-none focus:ring-2 focus:ring-ice-500 focus:border-transparent" placeholder="seu@email.com" required />
-                  </div>
+        {/* Login Card */}
+        <Card className="border-frost-200 dark:border-frost-700 shadow-xl">
+          <CardHeader className="text-center pb-4">
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">Entrar na conta</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-400">
+              Ou continue com WhatsApp
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* WhatsApp Login */}
+            <Button
+              variant="whatsapp"
+              onClick={handleWhatsAppLogin}
+              className="w-full"
+              size="lg"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Continuar com WhatsApp
+            </Button>
 
-                  <div>
-                    <label htmlFor="senha" className="block text-sm font-medium text-frost-700 mb-2">Senha</label>
-                    <input type="password" id="senha" className="w-full px-4 py-3 rounded-xl border border-frost-200 bg-white focus:outline-none focus:ring-2 focus:ring-ice-500 focus:border-transparent" placeholder="••••••••" required />
-                  </div>
+            <div className="relative">
+              <Separator className="mb-6" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 px-3 text-xs text-gray-500 dark:text-gray-400">
+                ou use e-mail
+              </span>
+            </div>
 
-                  <div className="flex items-center justify-between">
-                    <label className="flex items-center gap-2 text-sm text-frost-600 cursor-pointer">
-                      <input type="checkbox" className="w-4 h-4 rounded border-frost-300 text-ice-600 focus:ring-ice-500" />
-                      Lembrar-me
-                    </label>
-                    <Link href="/recuperar-senha" className="text-sm text-ice-600 hover:text-ice-700 font-medium">Esqueci a senha</Link>
-                  </div>
+            {/* Error Message */}
+            <AnimatePresence mode="wait">
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm"
+                >
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{error}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                  <button type="submit" className="w-full btn-primary py-3 text-lg font-semibold">
-                    Entrar
-                  </button>
-                </form>
-
-                <div className="mt-6 text-center text-frost-600">
-                  <p>Não tem conta? <Link href="/cadastro" className="text-ice-600 font-medium hover:underline">Cadastre-se</Link></p>
-                </div>
-
-                <div className="mt-6 pt-6 border-t border-frost-200">
-                  <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20fazer%20um%20pedido%20sem%20criar%20conta."
-                     target="_blank" rel="noopener noreferrer"
-                     className="btn-whatsapp w-full justify-center">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                    Pedir sem cadastro (WhatsApp)
-                  </a>
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  E-mail
+                </Label>
+                <div className="relative mt-1">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="seu@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="pl-10 pr-4 py-3"
+                    required
+                    disabled={isLoading}
+                  />
                 </div>
               </div>
-            </div>
+
+              <div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Senha
+                  </Label>
+                  <Link
+                    href="/esqueci-senha"
+                    className="text-sm text-ice-600 dark:text-ice-400 hover:underline"
+                  >
+                    Esqueci a senha
+                  </Link>
+                </div>
+                <div className="relative mt-1">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="pl-10 pr-12 py-3"
+                    required
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
+                  <Checkbox
+                    checked={formData.remember}
+                    onCheckedChange={(checked) => setFormData({ ...formData, remember: checked as boolean })}
+                    className="data-[state=checked]:bg-ice-600 data-[state=checked]:border-ice-600"
+                  />
+                  Lembrar-me
+                </Label>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full"
+                size="lg"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  'Entrar'
+                )}
+              </Button>
+            </form>
+
+            {/* Register Link */}
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+              Não tem conta?{' '}
+              <Link href="/cadastro" className="font-medium text-ice-600 dark:text-ice-400 hover:underline">
+                Cadastre-se grátis
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Benefits */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-8 grid grid-cols-3 gap-4 text-center"
+        >
+          <div className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-frost-200 dark:border-frost-700">
+            <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-2" />
+            <p className="text-xs text-gray-600 dark:text-gray-400">Pedidos rápidos</p>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </>
+          <div className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-frost-200 dark:border-frost-700">
+            <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-2" />
+            <p className="text-xs text-gray-600 dark:text-gray-400">Rastreamento</p>
+          </div>
+          <div className="p-4 bg-white dark:bg-gray-900 rounded-xl border border-frost-200 dark:border-frost-700">
+            <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-2" />
+            <p className="text-xs text-gray-600 dark:text-gray-400">Histórico</p>
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }

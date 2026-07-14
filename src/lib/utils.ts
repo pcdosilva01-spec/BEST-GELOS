@@ -46,10 +46,25 @@ export function formatRelativeTime(date: string | Date): string {
   return formatDate(date);
 }
 
-export function generateWhatsAppLink(phone: string, message: string): string {
+export function generateWhatsAppLink(message: string, phone: string = '5511999999999'): string {
   const cleanPhone = phone.replace(/\D/g, '');
   const encodedMessage = encodeURIComponent(message);
   return `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+}
+
+export function formatPhoneNumber(value: string): string {
+  const numbers = value.replace(/\D/g, '');
+  if (numbers.length <= 11) {
+    if (numbers.length <= 10) {
+      return numbers
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d{0,4})$/, '$1-$2');
+    }
+    return numbers
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d{0,4})$/, '$1-$2');
+  }
+  return value;
 }
 
 export function getOrderStatusLabel(status: string): string {
