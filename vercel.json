@@ -54,7 +54,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.bestgelo.com.br/api/:path*"
+      "destination": "https://best-gelo-backend.vercel.app/api/:path*"
     }
   ]
 }
