@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Ice, Truck, Shield, Star, MapPin, Phone, Mail, Facebook, Instagram, Whatsapp } from 'lucide-react';
+import { Menu, X, Snowflake, Truck, Shield, Star, MapPin, Phone, Mail, Facebook, Instagram, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -35,7 +35,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: 'WhatsApp', icon: Whatsapp, href: 'https://wa.me/5511999999999' },
+  { name: 'WhatsApp', icon: MessageSquare, href: 'https://wa.me/5511999999999' },
   { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/bestgelo' },
   { name: 'Facebook', icon: Facebook, href: 'https://facebook.com/bestgelo' },
 ];
@@ -59,7 +59,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2" aria-label="Best Gelo - Página inicial">
             <div className="relative">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-ice-500 to-ice-700 flex items-center justify-center shadow-ice">
-                <Ice className="w-6 h-6 sm:w-7 sm:h-7 text-white" aria-hidden="true" />
+                <Snowflake className="w-6 h-6 sm:w-7 sm:h-7 text-white" aria-hidden="true" />
               </div>
               <span className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white" aria-hidden="true" />
             </div>
@@ -86,7 +86,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 className="btn-whatsapp text-sm px-4 py-2"
               >
-                <Whatsapp className="w-4 h-4" aria-hidden="true" />
+                <MessageSquare className="w-4 h-4" aria-hidden="true" />
                 <span>Pedir no WhatsApp</span>
               </a>
             </div>
@@ -130,7 +130,7 @@ export function Header() {
                 rel="noopener noreferrer"
                 className="btn-whatsapp w-full justify-center"
               >
-                <Whatsapp className="w-5 h-5" aria-hidden="true" />
+                <MessageSquare className="w-5 h-5" aria-hidden="true" />
                 <span>Pedir pelo WhatsApp</span>
               </a>
             </div>
@@ -150,7 +150,7 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-6">
             <Link href="/" className="flex items-center gap-2" aria-label="Best Gelo - Página inicial">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-ice-500 to-ice-700 flex items-center justify-center">
-                <Ice className="w-7 h-7 text-white" aria-hidden="true" />
+                <Snowflake className="w-7 h-7 text-white" aria-hidden="true" />
               </div>
               <span className="font-display font-bold text-2xl text-white">Best Gelo</span>
             </Link>

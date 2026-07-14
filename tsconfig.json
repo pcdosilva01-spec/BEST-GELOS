@@ -24,6 +24,6 @@
     "target": "ES2017",
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["next-env.d.ts", "src/app/**/*.ts", "src/app/**/*.tsx", "src/components/**/*.ts", "src/components/**/*.tsx", "src/contexts/**/*.ts", "src/contexts/**/*.tsx", "src/hooks/**/*.ts", "src/hooks/**/*.tsx", "src/lib/**/*.ts", "src/lib/**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "src/common"]
 }
